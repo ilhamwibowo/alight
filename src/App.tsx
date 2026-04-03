@@ -74,20 +74,36 @@ function App() {
                 transition={{ duration: 0.15, ease: 'easeOut' }}
               >
                 <div className="welcome">
-                  <h1>Alight</h1>
-                  <p>
-                    Pick something from the sidebar. Step through it,
-                    adjust the speed, watch it work.
-                  </p>
-                  <div className="feature-list">
+                  <div className="welcome-hero">
+                    <h1>Alight</h1>
+                    <p className="welcome-tagline">see algorithms think</p>
+                    <p className="welcome-sub">
+                      Step through classic algorithms one operation at a time.
+                      Watch the code, variables, and visualization update together.
+                    </p>
+                  </div>
+                  <div className="feature-grid">
                     {registry.map((cat) => (
-                      <div
-                        key={cat.id}
-                        className="feature-card"
-                        onClick={() => setActiveViz(cat.items[0].id)}
-                      >
-                        <h3>{cat.label}</h3>
-                        <p>{cat.description}</p>
+                      <div key={cat.id} className="feature-card">
+                        <div className="feature-card-header">
+                          <h3>{cat.label}</h3>
+                          <span className="feature-card-count">
+                            {cat.items.length} {cat.items.length === 1 ? 'algo' : 'algos'}
+                          </span>
+                        </div>
+                        <p className="feature-card-desc">{cat.description}</p>
+                        <div className="feature-card-items">
+                          {cat.items.map((item) => (
+                            <button
+                              key={item.id}
+                              className="feature-card-item"
+                              onClick={() => setActiveViz(item.id)}
+                            >
+                              <span className="feature-card-icon">{item.icon}</span>
+                              {item.label}
+                            </button>
+                          ))}
+                        </div>
                       </div>
                     ))}
                   </div>
