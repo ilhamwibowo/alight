@@ -228,7 +228,9 @@
 .pathfinding-viz,
 .tree-viz,
 .kadane-viz,
-.floyd-viz {
+.floyd-viz,
+.jumpgame-viz,
+.minsub-viz {
   background: var(--bg-input);
   border: 1px solid var(--border);
   border-radius: 10px;
@@ -1064,6 +1066,467 @@
 
 .kadane-array-input::placeholder {
   color: var(--text-muted);
+}
+
+/* ── Jump Game Visualizer ── */
+.jumpgame-viz {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  gap: 12px;
+}
+
+.jumpgame-viz .viz-main {
+  justify-content: center;
+  align-items: center;
+}
+
+.jumpgame-array {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 6px;
+  padding: 24px 16px 12px;
+  flex-wrap: wrap;
+}
+
+.jumpgame-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  position: relative;
+}
+
+.jumpgame-cell .jg-index {
+  font-size: 10px;
+  color: var(--text-muted);
+}
+
+.jumpgame-cell .jg-value {
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  border: 1.5px solid var(--border);
+  background: var(--bg-input);
+  color: var(--ink);
+  transition: border-color 0.15s, background 0.15s, color 0.15s, box-shadow 0.15s;
+  position: relative;
+  z-index: 2;
+}
+
+.jumpgame-cell.reachable .jg-value {
+  border-color: var(--accent-soft);
+  background: var(--accent-bg);
+  color: var(--accent);
+}
+
+.jumpgame-cell.current .jg-value {
+  border-color: var(--accent);
+  background: #c7d2fe;
+  color: var(--accent-hover);
+  font-weight: 700;
+  box-shadow: 0 0 0 3px var(--accent-ghost);
+}
+
+.jumpgame-cell.done .jg-value {
+  border-color: var(--green);
+  background: var(--green-bg);
+  color: var(--green);
+  font-weight: 700;
+}
+
+.jumpgame-cell.stuck .jg-value {
+  border-color: var(--red);
+  background: var(--red-bg);
+  color: var(--red);
+  font-weight: 700;
+  box-shadow: 0 0 0 3px var(--red-ghost);
+}
+
+/* Reach bar: shows how far the current cell can jump */
+.jg-reach-bar {
+  position: absolute;
+  top: calc(50% + 2px);
+  left: 50%;
+  height: 4px;
+  background: linear-gradient(90deg, var(--accent-soft), var(--accent-ghost));
+  border-radius: 2px;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Max reach marker: small triangle below the cell that is the current max_reach boundary */
+.jg-max-reach-marker {
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-bottom: 6px solid var(--amber);
+}
+
+/* Stats row */
+.jumpgame-stats {
+  display: flex;
+  justify-content: center;
+  gap: 48px;
+  padding: 4px 0;
+}
+
+.jumpgame-stat {
+  text-align: center;
+}
+
+.jumpgame-stat .stat-label {
+  font-size: 11px;
+  color: var(--text-secondary);
+  margin-bottom: 2px;
+  font-weight: 500;
+}
+
+.jumpgame-stat .stat-value {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: -0.02em;
+}
+
+.jumpgame-stat .stat-value.target {
+  color: var(--text-secondary);
+}
+
+/* Max reach progress track */
+.jumpgame-reach-track {
+  position: relative;
+  height: 5px;
+  margin: 0 24px 8px;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.jg-track-bg {
+  position: absolute;
+  inset: 0;
+  background: var(--bg-raised);
+  border: 1px solid var(--border-subtle);
+  border-radius: 3px;
+}
+
+.jg-track-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  border-radius: 3px;
+  background: linear-gradient(90deg, var(--accent-soft), var(--accent));
+  z-index: 1;
+}
+
+/* Result badge */
+.jumpgame-result {
+  text-align: center;
+  font-size: 16px;
+  font-weight: 700;
+  padding: 8px 20px;
+  border-radius: 8px;
+  margin: 4px auto 8px;
+  width: fit-content;
+}
+
+.jumpgame-result.true {
+  color: var(--green);
+  background: var(--green-bg);
+  border: 1.5px solid var(--green);
+}
+
+.jumpgame-result.false {
+  color: var(--red);
+  background: var(--red-bg);
+  border: 1.5px solid var(--red);
+}
+
+/* Input row */
+.jumpgame-input-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.jg-array-input {
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 5px 10px;
+  width: 180px;
+  color: var(--ink);
+  font-size: 12px;
+}
+
+.jg-array-input:focus {
+  border-color: var(--accent-soft);
+  box-shadow: 0 0 0 2px var(--accent-ghost);
+}
+
+.jg-array-input::placeholder {
+  color: var(--text-muted);
+}
+
+.jg-preset-select {
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 5px 8px;
+  font-size: 12px;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.jg-preset-select:hover {
+  border-color: var(--border-hover);
+}
+
+/* ── Min Subarray Visualizer ── */
+.minsub-viz {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  gap: 12px;
+}
+
+.minsub-viz .viz-main {
+  justify-content: center;
+  align-items: center;
+}
+
+/* Target badge at top of viz */
+.minsub-target-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 0 0;
+}
+
+.minsub-target-label {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.minsub-target-value {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--amber);
+  background: var(--amber-bg);
+  border: 1px solid var(--amber);
+  border-radius: 6px;
+  padding: 2px 10px;
+  line-height: 1.3;
+}
+
+/* Array cells */
+.minsub-array {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 6px;
+  padding: 16px 16px 4px;
+  flex-wrap: wrap;
+}
+
+.minsub-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  position: relative;
+}
+
+.minsub-cell .ms-index {
+  font-size: 10px;
+  color: var(--text-muted);
+}
+
+.minsub-cell .ms-value {
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  border: 1.5px solid var(--border);
+  background: var(--bg-input);
+  color: var(--ink);
+  transition: border-color 0.15s, background 0.15s, color 0.15s, box-shadow 0.15s;
+}
+
+.minsub-cell.window .ms-value {
+  border-color: var(--accent-soft);
+  background: var(--accent-bg);
+  color: var(--accent);
+}
+
+.minsub-cell.window-shrink .ms-value {
+  border-color: var(--amber);
+  background: var(--amber-bg);
+  color: var(--amber);
+}
+
+.minsub-cell.best .ms-value {
+  border-color: var(--green);
+  background: var(--green-bg);
+  color: var(--green);
+  font-weight: 700;
+}
+
+/* Pointer labels below cells */
+.ms-pointers {
+  display: flex;
+  gap: 4px;
+  height: 18px;
+}
+
+.ms-ptr {
+  font-size: 10px;
+  font-weight: 700;
+  border-radius: 3px;
+  padding: 0 4px;
+  line-height: 1.6;
+}
+
+.ms-ptr.left {
+  background: var(--amber-bg);
+  color: var(--amber);
+  border: 1px solid var(--amber);
+}
+
+.ms-ptr.right {
+  background: var(--accent-bg);
+  color: var(--accent);
+  border: 1px solid var(--accent-soft);
+}
+
+/* Stats row */
+.minsub-stats {
+  display: flex;
+  justify-content: center;
+  gap: 48px;
+  padding: 4px 0;
+}
+
+.minsub-stat {
+  text-align: center;
+}
+
+.minsub-stat .stat-label {
+  font-size: 11px;
+  color: var(--text-secondary);
+  margin-bottom: 2px;
+  font-weight: 500;
+}
+
+.minsub-stat .stat-value {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: -0.02em;
+}
+
+.minsub-stat .stat-value.over {
+  color: var(--amber);
+}
+
+.minsub-stat .stat-value.best {
+  color: var(--green);
+}
+
+/* Result badge */
+.minsub-result {
+  text-align: center;
+  font-size: 16px;
+  font-weight: 700;
+  padding: 8px 20px;
+  border-radius: 8px;
+  margin: 4px auto 8px;
+  width: fit-content;
+}
+
+.minsub-result.found {
+  color: var(--green);
+  background: var(--green-bg);
+  border: 1.5px solid var(--green);
+}
+
+.minsub-result.none {
+  color: var(--red);
+  background: var(--red-bg);
+  border: 1.5px solid var(--red);
+}
+
+/* Input row */
+.minsub-input-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.ms-target-input {
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 5px 10px;
+  width: 60px;
+  color: var(--ink);
+  font-size: 12px;
+  text-align: center;
+}
+
+.ms-array-input {
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 5px 10px;
+  width: 160px;
+  color: var(--ink);
+  font-size: 12px;
+}
+
+.ms-target-input:focus,
+.ms-array-input:focus {
+  border-color: var(--accent-soft);
+  box-shadow: 0 0 0 2px var(--accent-ghost);
+}
+
+.ms-target-input::placeholder,
+.ms-array-input::placeholder {
+  color: var(--text-muted);
+}
+
+.ms-preset-select {
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 5px 8px;
+  font-size: 12px;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.ms-preset-select:hover {
+  border-color: var(--border-hover);
 }
 
 /* ── Floyd Visualizer ── */

@@ -7,6 +7,8 @@ import PathfindingVisualizer from './visualizers/pathfinding/PathfindingVisualiz
 import TreeVisualizer from './visualizers/tree/TreeVisualizer';
 import KadaneVisualizer from './visualizers/kadane/KadaneVisualizer';
 import FloydVisualizer from './visualizers/floyd/FloydVisualizer';
+import MinSubarrayVisualizer from './visualizers/minsubarray/MinSubarrayVisualizer';
+import JumpGameVisualizer from './visualizers/jumpgame/JumpGameVisualizer';
 
 const visualizerComponents: Record<string, React.FC> = {
   sorting: SortingVisualizer,
@@ -14,6 +16,8 @@ const visualizerComponents: Record<string, React.FC> = {
   tree: TreeVisualizer,
   kadane: KadaneVisualizer,
   floyd: FloydVisualizer,
+  'jump-game': JumpGameVisualizer,
+  'min-subarray': MinSubarrayVisualizer,
 };
 
 function App() {

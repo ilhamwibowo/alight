@@ -105,6 +105,18 @@ export const ALGO_INFO: Record<string, Omit<Props, 'hint'>> = {
     space: 'O(1)',
     description: 'At each element, decide: extend the current subarray or start fresh. Tracks the running max to find the maximum sum subarray.',
   },
+  MinSubarray: {
+    name: 'Min Size Subarray Sum (Sliding Window)',
+    time: 'O(n)',
+    space: 'O(1)',
+    description: 'Expand the window right until the sum meets the target, then shrink from the left to find the shortest valid window.',
+  },
+  JumpGame: {
+    name: 'Jump Game (Greedy)',
+    time: 'O(n)',
+    space: 'O(1)',
+    description: 'Track the farthest reachable index. At each position, extend the reach by nums[i]. If you ever land beyond max_reach, you\'re stuck.',
+  },
   Floyd: {
     name: 'Floyd\u2019s Tortoise & Hare',
     time: 'O(n)',

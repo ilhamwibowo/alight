@@ -42,6 +42,15 @@ export const registry: Category[] = [
     description: 'Classic DP problems visualized',
     items: [
       { id: 'kadane', label: 'Max Subarray (LC 53)', icon: '\u03A3' },
+      { id: 'jump-game', label: 'Jump Game (LC 55)', icon: '\u21E5' },
+    ],
+  },
+  {
+    id: 'sliding-window',
+    label: 'Sliding Window',
+    description: 'Two-pointer window techniques',
+    items: [
+      { id: 'min-subarray', label: 'Min Subarray Sum (LC 209)', icon: '\u21C6' },
     ],
   },
   {
