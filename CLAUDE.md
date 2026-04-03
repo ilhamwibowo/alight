@@ -5,7 +5,7 @@
 ## Tech Stack
 - React 19 + TypeScript + Vite
 - framer-motion (animations)
-- No other runtime deps. No router — state-based view switching.
+- No other runtime deps. Hash-based routing (`/#/<viz-id>`) for shareable links — no router library.
 
 ## Project Structure
 
@@ -170,7 +170,7 @@ MyAlgo: {
 },
 ```
 
-**`src/App.tsx`** — Import and map:
+**`src/App.tsx`** — Import and add to `visualizerComponents`:
 ```tsx
 import MyVisualizer from './visualizers/myalgo/MyVisualizer';
 
@@ -179,6 +179,8 @@ const visualizerComponents: Record<string, React.FC> = {
   'my-algo': MyVisualizer,
 };
 ```
+
+The key in `visualizerComponents` must match the `id` in `registry.ts`. This ID is also the hash route — the visualizer will be accessible at `/#/my-algo`.
 
 ### 4. Add CSS
 
@@ -221,12 +223,14 @@ The visualizations should be **stunning**, not just functional. Every new visual
 
 ## Existing Visualizers (for reference)
 
-| Algorithm | Category | File | Best reference for |
-|-----------|----------|------|--------------------|
-| Sorting (5 algos) | Sorting | `sorting/` | Bar visualization, framer-motion animation, heatmap |
-| BFS/DFS/Dijkstra | Pathfinding | `pathfinding/` | Grid visualization, wall drawing, distance gradient |
-| BST operations | Trees | `tree/` | SVG node/edge rendering, multiple operations |
-| Kadane's (LC 53) | DP | `kadane/` | Array cell visualization, simple layout |
-| Floyd's (LC 141) | Linked List | `floyd/` | Linked list SVG, emoji icons, cycle visualization |
+| Algorithm | Route | Category | File | Best reference for |
+|-----------|-------|----------|------|--------------------|
+| Sorting (5 algos) | `/#/sorting` | Sorting | `sorting/` | Bar visualization, framer-motion animation, heatmap |
+| BFS/DFS/Dijkstra | `/#/pathfinding` | Pathfinding | `pathfinding/` | Grid visualization, wall drawing, distance gradient |
+| BST operations | `/#/tree` | Trees | `tree/` | SVG node/edge rendering, multiple operations |
+| Kadane's (LC 53) | `/#/kadane` | DP | `kadane/` | Array cell visualization, simple layout |
+| Jump Game (LC 55) | `/#/jump-game` | DP | `jumpgame/` | Greedy, reachable-cell highlighting, progress bar |
+| Min Subarray Sum (LC 209) | `/#/min-subarray` | Sliding Window | `minsubarray/` | Sliding window, L/R pointers, expand/shrink phases |
+| Floyd's (LC 141) | `/#/floyd` | Linked List | `floyd/` | Linked list SVG, emoji icons, cycle visualization |
 
 When adding a new algorithm, pick the closest existing one as a starting template.

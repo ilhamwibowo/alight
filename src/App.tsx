@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import './App.css';
 import { registry } from './registry';
@@ -20,15 +20,31 @@ const visualizerComponents: Record<string, React.FC> = {
   'min-subarray': MinSubarrayVisualizer,
 };
 
+function getVizFromHash(): string | null {
+  const hash = window.location.hash.replace(/^#\/?/, '');
+  return hash && hash in visualizerComponents ? hash : null;
+}
+
 function App() {
-  const [activeViz, setActiveViz] = useState<string | null>(null);
+  const [activeViz, setActiveViz] = useState<string | null>(getVizFromHash);
+
+  const navigate = useCallback((id: string | null) => {
+    setActiveViz(id);
+    window.location.hash = id ? `/${id}` : '/';
+  }, []);
+
+  useEffect(() => {
+    const onHashChange = () => setActiveViz(getVizFromHash());
+    window.addEventListener('hashchange', onHashChange);
+    return () => window.removeEventListener('hashchange', onHashChange);
+  }, []);
 
   const ActiveComponent = activeViz ? visualizerComponents[activeViz] : null;
 
   return (
     <div className="app">
       <aside className="sidebar">
-        <div className="sidebar-header">
+        <div className="sidebar-header" onClick={() => navigate(null)} style={{ cursor: 'pointer' }}>
           <h1>Alight</h1>
           <p>see algorithms think</p>
         </div>
@@ -40,7 +56,7 @@ function App() {
                 <button
                   key={item.id}
                   className={`nav-item ${activeViz === item.id ? 'active' : ''}`}
-                  onClick={() => setActiveViz(item.id)}
+                  onClick={() => navigate(item.id)}
                 >
                   <span className="nav-icon">{item.icon}</span>
                   {item.label}
@@ -97,7 +113,7 @@ function App() {
                             <button
                               key={item.id}
                               className="feature-card-item"
-                              onClick={() => setActiveViz(item.id)}
+                              onClick={() => navigate(item.id)}
                             >
                               <span className="feature-card-icon">{item.icon}</span>
                               {item.label}
